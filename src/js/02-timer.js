@@ -43,4 +43,4 @@ console.dir(flatpickr)
 
 
 
-startBtn.addEventListener('click', console.log(selectedDates))
+startBtn.addEventListener('click', console.log('123'))
