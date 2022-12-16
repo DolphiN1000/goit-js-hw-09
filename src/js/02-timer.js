@@ -2,7 +2,19 @@ import flatpickr from "flatpickr";
 
 import "flatpickr/dist/flatpickr.min.css";
 
-startBtn = document.querySelector("[data-start]")
+import Notiflix from 'notiflix';
+
+let startTime = 0;
+let deltaTime = 0;
+
+const refs = {
+  dataInput : document.querySelector("#datetime-picker") ,
+  startBtn : document.querySelector("[data-start]"),
+days : document.querySelector("[data-days]"),
+hours : document.querySelector("[data-hours]"),
+minutes : document.querySelector("[data-minutes]"),
+seconds : document.querySelector("[data-seconds]"),
+}
 
 const options = {
     enableTime: true,
@@ -11,8 +23,48 @@ const options = {
     minuteIncrement: 1,
     onClose(selectedDates) {
       console.log(selectedDates[0]);
+      startTime = selectedDates[0].getTime();
+      if (startTime < Date.now()) {
+        Notiflix.Notify.info("Please choose a date in the future");
+        return;
+      }
+      refs.startBtn.removeAttribute("disabled");
+     
     },
   };
+
+  flatpickr("input#datetime-picker", options);
+console.dir(flatpickr)
+refs.startBtn.setAttribute("disabled", true);
+refs.startBtn.addEventListener('click', startTimer);
+
+function startTimer() {
+  refs.dataInput.setAttribute("disabled", true);
+  refs.startBtn.setAttribute("disabled", true);
+  const intervalId = setInterval(() => {
+    const currentTime = Date.now();
+    deltaTime = startTime - currentTime;
+    if (deltaTime <= 1000) {
+      clearInterval(intervalId);
+      refs.dataInput.removeAttribute("disabled");
+      return;
+    }
+    const time = convertMs(deltaTime);
+    console.log(time);
+    refs.days.textContent = time.days;
+    refs.hours.textContent = time.hours;
+    refs.minutes.textContent = time.minutes;
+    refs.seconds.textContent = time.seconds;
+
+    if (time.days <= 0 && time.hours <= 0 && time.minutes <= 0 && time.seconds <= 0) {
+      Notiflix.Notify.info('END')
+      clearInterval(intervalId);
+      refs.dataInput.removeAttribute("disabled");
+    return;
+    }
+
+    }, 1000);
+}
 
   function convertMs(ms) {
     // Number of milliseconds per unit of time
@@ -37,10 +89,9 @@ const options = {
   console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
   console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
-flatpickr("#datetime-picker", options);
-console.dir(flatpickr)
 
 
 
 
-startBtn.addEventListener('click', console.log('123'))
+
+// refs.startBtn.addEventListener('click', console.log(refs.dataInput.elements.input.value))
