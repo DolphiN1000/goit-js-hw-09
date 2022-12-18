@@ -43,7 +43,7 @@ if(stepValue < 0){
    return;
 };
 if(amountValue < 1){
-  Notiflix.Notify.info("Pleas input delay value from 1");
+  Notiflix.Notify.info("Pleas input amount value from 1");
    return;
 }
   console.log('refs.inputForm.delay.textContent',delayValue,stepValue,amountValue)
