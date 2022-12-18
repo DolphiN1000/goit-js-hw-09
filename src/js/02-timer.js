@@ -44,22 +44,23 @@ function startTimer() {
   const intervalId = setInterval(() => {
     const currentTime = Date.now();
     deltaTime = startTime - currentTime;
-    if (deltaTime <= 1000) {
+    if (deltaTime < 0) {
       clearInterval(intervalId);
       refs.dataInput.removeAttribute("disabled");
       return;
     }
     const time = convertMs(deltaTime);
     console.log(time);
-    refs.days.textContent = time.days;
-    refs.hours.textContent = time.hours;
-    refs.minutes.textContent = time.minutes;
-    refs.seconds.textContent = time.seconds;
+    refs.days.textContent = pad(time.days);
+    refs.hours.textContent = pad(time.hours);
+    refs.minutes.textContent = pad(time.minutes);
+    refs.seconds.textContent = pad(time.seconds);
 
     if (time.days <= 0 && time.hours <= 0 && time.minutes <= 0 && time.seconds <= 0) {
       Notiflix.Notify.info('END')
       clearInterval(intervalId);
       refs.dataInput.removeAttribute("disabled");
+    
     return;
     }
 
@@ -89,6 +90,9 @@ function startTimer() {
   console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
   console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
+  function pad(value) {
+    return String(value).padStart(2, '0');
+  };
 
 
 
