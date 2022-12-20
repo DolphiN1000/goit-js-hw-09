@@ -49,7 +49,6 @@ function startTimer() {
       return;
     }
     const time = convertMs(deltaTime);
-    Notiflix.Notify.info(time);
     refs.days.textContent = pad(time.days);
     refs.hours.textContent = pad(time.hours);
     refs.minutes.textContent = pad(time.minutes);
